@@ -1,5 +1,5 @@
 import dataClasses.Repository
-import github.fetchRepoContents
+import github.RepoHandler
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
@@ -9,7 +9,9 @@ suspend fun main() {
     val owner = "LassiEH"
     val repo = "documenter"
     val contents = "src/main/kotlin"
-    val files = fetchRepoContents(owner, repo, contents)
+
+    val repoHandler = RepoHandler()
+    val files = repoHandler.fetchRepoContents(owner, repo, contents)
 
     files.forEach {
         println(it)
