@@ -1,20 +1,22 @@
-import dataClasses.Repository
 import github.RepoHandler
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
+
 
 suspend fun main() {
     val owner = "LassiEH"
     val repo = "documenter"
     val contents = "src/main/kotlin"
+    val fileAddress = "src/main/kotlin/Main.kt"
 
     val repoHandler = RepoHandler()
+
     val files = repoHandler.fetchRepoContents(owner, repo, contents)
 
     files.forEach {
         println(it)
+        println(it.download_url)
     }
+
+    val fileText = repoHandler.fetchFileContents(owner, repo, fileAddress)
+    println(fileText)
 
 }

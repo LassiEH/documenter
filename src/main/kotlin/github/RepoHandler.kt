@@ -1,13 +1,15 @@
 package github
 
-import dataClasses.Repository
+import dataClasses.RepositoryStructure
 import io.ktor.client.*
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import java.util.Base64
 
 // https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
 // Fetch repository from GitHub
@@ -22,11 +24,22 @@ class RepoHandler {
         }
     }
 
-    suspend fun fetchRepoContents(owner: String, repo: String, contents: String = ""): List<Repository> {
+    suspend fun fetchRepoContents(owner: String, repo: String, contents: String = ""): List<RepositoryStructure> {
+        // address of wanted repository
         val address = "https://api.github.com/repos/$owner/$repo/contents/$contents"
-        val files: List<Repository> = client.get(address).body()
-        client.close()
+        // get list of repository structures (files, directories) in repo
+        val files: List<RepositoryStructure> = client.get(address).body()
+        // don't close twice
+        //client.close()
         return files
+    }
+
+    suspend fun fetchFileContents(owner: String, repo: String, contents: String): String {
+        // address of wanted repository
+        val address = "https://api.github.com/repos/$owner/$repo/contents/$contents"
+        //return file content as text
+        return client.get(address).bodyAsText()
+
     }
 
 }
