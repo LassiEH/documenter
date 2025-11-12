@@ -7,7 +7,7 @@ data class RepositoryStructure(
     val name: String,
     val path: String,
     val type: String,
-    val download_url: String? = null,
+    val url: String,
     val content: String? = null,
     val encoding: String? = null
 )

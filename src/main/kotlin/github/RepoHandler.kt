@@ -34,12 +34,19 @@ class RepoHandler {
         return files
     }
 
-    suspend fun fetchFileContents(owner: String, repo: String, contents: String): String {
+    suspend fun fetchFileContents(owner: String, repo: String, contents: String): String? {
         // address of wanted repository
-        val address = "https://api.github.com/repos/$owner/$repo/contents/$contents"
         //return file content as text
-        return client.get(address).bodyAsText()
+        val file: RepositoryStructure = client.get(contents).body()
+        val content = file.content
+        val type = file.encoding
+        println(type)
+        println(content)
+        val cleaned = file.content?.filterNot { it.isWhitespace() }
 
+        val decodedBytes = Base64.getDecoder().decode(cleaned)
+        val text = decodedBytes.toString(Charsets.UTF_8)
+        return text
     }
 
 }
