@@ -23,4 +23,6 @@ suspend fun main() {
     val fileText = repoHandler.fetchFileContents(owner, repo, addList[0])
     println(fileText)
 
+    repoHandler.closeClient()
+
 }

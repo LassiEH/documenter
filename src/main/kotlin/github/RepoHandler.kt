@@ -29,19 +29,13 @@ class RepoHandler {
         val address = "https://api.github.com/repos/$owner/$repo/contents/$contents"
         // get list of repository structures (files, directories) in repo
         val files: List<RepositoryStructure> = client.get(address).body()
-        // don't close twice
-        //client.close()
         return files
     }
 
-    suspend fun fetchFileContents(owner: String, repo: String, contents: String): String? {
+    suspend fun fetchFileContents(owner: String, repo: String, contents: String): String {
         // address of wanted repository
         //return file content as text
         val file: RepositoryStructure = client.get(contents).body()
-        val content = file.content
-        val type = file.encoding
-        println(type)
-        println(content)
         // remove whitespace for decoding to work
         val cleaned = file.content?.filterNot { it.isWhitespace() }
         // decode the content
@@ -49,6 +43,10 @@ class RepoHandler {
         // turn to string
         val text = decodedBytes.toString(Charsets.UTF_8)
         return text
+    }
+
+    suspend fun closeClient() {
+        client.close()
     }
 
 }
