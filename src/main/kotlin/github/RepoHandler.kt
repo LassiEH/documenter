@@ -42,9 +42,11 @@ class RepoHandler {
         val type = file.encoding
         println(type)
         println(content)
+        // remove whitespace for decoding to work
         val cleaned = file.content?.filterNot { it.isWhitespace() }
-
+        // decode the content
         val decodedBytes = Base64.getDecoder().decode(cleaned)
+        // turn to string
         val text = decodedBytes.toString(Charsets.UTF_8)
         return text
     }
