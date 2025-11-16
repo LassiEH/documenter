@@ -45,8 +45,15 @@ class RepoHandler {
         return text
     }
 
-    suspend fun closeClient() {
+    fun closeClient() {
         client.close()
+    }
+
+    suspend fun listFiles(repoStructList: List<RepositoryStructure>): List<RepositoryStructure> {
+        repoStructList.forEach {
+            println(it.name)
+        }
+        return repoStructList
     }
 
 }
