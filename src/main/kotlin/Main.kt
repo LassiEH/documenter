@@ -1,4 +1,7 @@
 import github.RepoHandler
+import dataClasses.RepoNode
+import dataClasses.FolderNode
+import dataClasses.FileNode
 
 
 suspend fun main() {
@@ -9,20 +12,24 @@ suspend fun main() {
     val addList = mutableListOf<String>()
     val repoHandler = RepoHandler()
 
-    val files = repoHandler.fetchRepoContents(owner, repo, contents)
+    val root = repoHandler.fetchRepo(owner, repo)
+    printTree(root)
 
-    files.forEach {
-        println(it)
-        println(it.content)
-        addList.add(it.url)
-    }
-
-    println(addList)
-    println(addList[0])
-
-    val fileText = repoHandler.fetchFileContents(owner, repo, addList[0])
-    println(fileText)
 
     repoHandler.closeClient()
 
+}
+
+fun printTree(node: RepoNode, indent: String = "") {
+    when (node) {
+        is FolderNode -> {
+            println("${node.name}/")
+            node.children.forEach { child ->
+                printTree(child, "$indent   ")
+            }
+        }
+        is FileNode -> {
+            println("$indent ${node.name}")
+        }
+    }
 }
