@@ -45,6 +45,10 @@ class RepoHandler {
         return text
     }
 
+    suspend fun fetchRepository(owner: String, repo: String): List<RepositoryStructure> {
+        return fetchRepoContents(owner, repo)
+    }
+
     fun closeClient() {
         client.close()
     }
