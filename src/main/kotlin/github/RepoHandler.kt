@@ -1,7 +1,6 @@
 package github
 
 import dataClasses.RepositoryStructure
-import dataClasses.RepoNode
 import dataClasses.FolderNode
 import dataClasses.FileNode
 import io.ktor.client.*
@@ -9,8 +8,6 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.parseAndSortContentTypeHeader
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import java.util.Base64
@@ -57,16 +54,24 @@ class RepoHandler {
         )
     }
 
+    fun decodeBase64(encodedContent: String?): String {
+        val cleaned = encodedContent?.filterNot { it.isWhitespace() }
+        val decodedBytes = Base64.getDecoder().decode(cleaned)
+
+        return decodedBytes.toString(Charsets.UTF_8)
+    }
+
     suspend fun fetchFileContents(owner: String, repo: String, path: String): String {
         val url = "https://api.github.com/repos/$owner/$repo/contents/$path"
         val file: RepositoryStructure = client.get(url).body()
 
-        val base64 = file.content ?: return ""
+        val decodedString = decodeBase64(file.content)
+        //val base64 = file.content ?: return ""
 
-        val cleaned = base64.filterNot { it.isWhitespace() }
-        val decodedBytes = Base64.getDecoder().decode(cleaned)
+        //val cleaned = base64.filterNot { it.isWhitespace() }
+        //val decodedBytes = Base64.getDecoder().decode(cleaned)
 
-        return decodedBytes.toString(Charsets.UTF_8)
+        return decodedString
     }
 
     suspend fun fetchRepo(owner: String, repo: String): FolderNode {
