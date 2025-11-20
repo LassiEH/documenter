@@ -39,23 +39,24 @@ fun printTree(node: RepoNode, indent: String = "") {
     }
 }
 
-fun findFile(node: RepoNode, searchedRepo: String): FileNode {
+fun findFile(node: RepoNode, searchedName: String): FileNode? {
     return when (node) {
         is FileNode -> {
-            if (node.name == searchedRepo) node else null
+            if (node.name == searchedName) node else null
         }
         is FolderNode -> {
             for (child in node.children) {
-                val result = findFile(child, searchedRepo)
-                return result
+                val result = findFile(child, searchedName)
+                if (result != null) return result
             }
+            null
 
         }
-    } as FileNode
+    }
 }
 
-fun printFileContent(file: FileNode) {
-    val decoded = decodeBase64(file.content)
+fun printFileContent(file: FileNode?) {
+    val decoded = decodeBase64(file?.content)
     println(decoded)
 }
 
