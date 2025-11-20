@@ -14,8 +14,8 @@ suspend fun main() {
     val addList = mutableListOf<String>()
     val repoHandler = RepoHandler()
 
-    //val root = repoHandler.fetchRepo(owner, repo)
-    val root = MockRepoNode.test()
+    val root = repoHandler.fetchRepo(owner, repo)
+    //val root = MockRepoNode.test()
     printTree(root)
 
     val file = findFile(root, "Main.kt")

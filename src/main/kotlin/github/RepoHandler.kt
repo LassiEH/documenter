@@ -47,10 +47,12 @@ class RepoHandler {
     }
 
     suspend fun fetchFile(owner: String, repo: String, rs: RepositoryStructure): FileNode {
+        // very heavy on GitHub api rate limits...
+        val decoded = fetchFileContents(owner, repo, rs.path)
         return FileNode(
             name = rs.name,
             path = rs.path,
-            content = null,
+            content = decoded,
         )
     }
 
