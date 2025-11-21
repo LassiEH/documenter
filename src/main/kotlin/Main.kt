@@ -55,6 +55,7 @@ fun findFile(node: RepoNode, searchedName: String): FileNode? {
     }
 }
 
+// only used with mock data
 fun printFileContent(file: FileNode?) {
     val decoded = decodeBase64(file?.content)
     println(decoded)
