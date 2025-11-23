@@ -9,9 +9,35 @@ import dataClasses.addImage
 import dataClasses.addParagraph
 import github.MockRepoNode
 import java.util.Base64
+import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.runtime.*
+import androidx.compose.material.Text
+import androidx.compose.material.Button
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import kotlinx.coroutines.runBlocking
+
+fun main() = application {
+    Window(onCloseRequest = ::exitApplication) {
+        App()
+    }
+}
+
+@Composable
+@Preview
+fun App() {
+    var counter by remember { mutableStateOf(0) }
+    Button(onClick = { counter++ }) {
+        Text("Clicked $counter times")
+    }
+}
+
+fun mainTest() = runBlocking {
+    test()
+}
 
 
-suspend fun main() {
+suspend fun test() {
     val owner = "LassiEH"
     val repo = "documenter"
     val contents = "src/main/kotlin"
