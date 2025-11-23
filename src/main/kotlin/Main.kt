@@ -1,7 +1,12 @@
+import dataClasses.Document
 import github.RepoHandler
 import dataClasses.RepoNode
 import dataClasses.FolderNode
 import dataClasses.FileNode
+import dataClasses.addCode
+import dataClasses.addHeading
+import dataClasses.addImage
+import dataClasses.addParagraph
 import github.MockRepoNode
 import java.util.Base64
 
@@ -14,8 +19,33 @@ suspend fun main() {
     val addList = mutableListOf<String>()
     val repoHandler = RepoHandler()
 
-    val root = repoHandler.fetchRepo(owner, repo)
-    //val root = MockRepoNode.test()
+    val docu = Document(
+        title = "tst docu",
+        repoName = "tst repo"
+    )
+
+    docu.addHeading("Installing")
+    docu.addParagraph("How to install")
+
+    val imageBytes = ByteArray(10) { it.toByte() }
+    docu.addImage("install", imageBytes)
+    docu.addCode("src/main/kotlin/Main.kt", "fun main() {println(hello)}")
+
+    docu.parts.forEach { item ->
+        when (item) {
+            is DocumentItem.Heading ->
+                println(item.text)
+            is DocumentItem.Paragraph ->
+                println(item.text)
+            is DocumentItem.Image ->
+                println(item.bytes)
+            is DocumentItem.Code ->
+                println(item.code)
+        }
+    }
+
+    // val root = repoHandler.fetchRepo(owner, repo)
+    val root = MockRepoNode.test()
     printTree(root)
 
     val file = findFile(root, "Main.kt")
