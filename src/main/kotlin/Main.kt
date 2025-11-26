@@ -9,6 +9,7 @@ import dataClasses.addImage
 import dataClasses.addParagraph
 import github.MockRepoNode
 import java.util.Base64
+import ui.App
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.*
 import androidx.compose.material.Text
@@ -22,16 +23,17 @@ fun main() = application {
         App()
     }
 }
-
+ /**
 @Composable
 @Preview
 fun App() {
     var counter by remember { mutableStateOf(0) }
     Button(onClick = { counter++ }) {
         Text("Clicked $counter times")
+        mainTest()
     }
 }
-
+**/
 fun mainTest() = runBlocking {
     test()
 }
