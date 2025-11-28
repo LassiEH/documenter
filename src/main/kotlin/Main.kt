@@ -19,8 +19,9 @@ import androidx.compose.ui.window.application
 import kotlinx.coroutines.runBlocking
 
 fun main() = application {
+    val root = MockRepoNode.test()
     Window(onCloseRequest = ::exitApplication) {
-        App()
+        App(root)
     }
 }
  /**
