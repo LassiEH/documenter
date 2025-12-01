@@ -6,18 +6,21 @@ import androidx.compose.foundation.layout.*
 import  dataClasses.*
 
 @Composable
-fun DocuExplorer(root: RepoNode) {
+fun DocuExplorer(root: RepoNode, selected: (FileNode) -> Unit) {
     when (root) {
         is FolderNode -> {
             Column {
                 Text(root.name)
                 root.children.forEach { child ->
-                    DocuExplorer(child)
+                    DocuExplorer(child, selected)
                 }
             }
         }
         is FileNode -> {
-            Text(root.name)
+            //Text(root.name)
+            TextButton(onClick = { selected(root) }) {
+                Text(root.name)
+            }
         }
     }
 }
