@@ -6,22 +6,31 @@ import dataClasses.RepoNode
 import androidx.compose.ui.Modifier
 import androidx.compose.material.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun App(root: RepoNode) {
     var selectedFile by remember { mutableStateOf<FileNode?>(null) }
 
     Row(Modifier.fillMaxSize()) {
+        Box(Modifier.weight(1f)) {
+            Column {
+                DocumenterView(
+                    root = root,
+                )
+
+                Spacer(Modifier.height(16.dp))
+                Button(onClick = { println("Add heading") }) { Text("Add Heading") }
+            }
+        }
         Box(Modifier.weight(1f).fillMaxHeight()) {
-            Text("Placeholder - place repo tree here?")
             DocuExplorer(
                 root = root,
                 selected = {selectedFile = it}
             )
         }
         Box(Modifier.weight(1f).fillMaxHeight()) {
-            Text("Placeholder - place editor here?")
-            DocuViewer(selectedFile)
+            RepoViewer(selectedFile)
         }
     }
 }

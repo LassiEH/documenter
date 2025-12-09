@@ -43,7 +43,12 @@ object MockRepoNode {
                                 FileNode(
                                     name = "Main.kt",
                                     path = "src/main/Main.kt",
-                                    content = "ZnVuIG1haW4oKSB7CnByaW50bG4oIkhlbGxvIHRlc3QhIikKfQ=="
+                                    content = "fun main() = application {\n" +
+                                            "    val root = MockRepoNode.test()\n" +
+                                            "    Window(onCloseRequest = ::exitApplication) {\n" +
+                                            "        App(root)\n" +
+                                            "    }\n" +
+                                            "}"
                                 )
                             )
                         ),

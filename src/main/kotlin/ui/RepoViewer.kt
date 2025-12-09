@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import  dataClasses.FileNode
 
 @Composable
-fun DocuViewer(selectedFile: FileNode?) {
+fun RepoViewer(selectedFile: FileNode?) {
     if (selectedFile == null) {
         Text("No file selected")
         return
