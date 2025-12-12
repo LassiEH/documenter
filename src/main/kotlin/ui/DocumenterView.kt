@@ -5,12 +5,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import dataClasses.Document
 import dataClasses.RepoNode
 
 @Composable
-fun DocumenterView(root: RepoNode) {
+fun DocumenterView(document: Document) {
     Box {
-        Text("Documenting ${root.name}")
+        Text("Documenting ${document.title}")
     }
 
 }

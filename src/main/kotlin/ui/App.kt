@@ -7,16 +7,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.unit.dp
+import dataClasses.Document
 
 @Composable
 fun App(root: RepoNode) {
     var selectedFile by remember { mutableStateOf<FileNode?>(null) }
+    var document by remember { mutableStateOf(Document(title = "document", repoName = root.name)) }
 
     Row(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f)) {
             Column {
                 DocumenterView(
-                    root = root,
+                    document = document
                 )
 
                 Spacer(Modifier.height(16.dp))
