@@ -9,9 +9,38 @@ import dataClasses.addImage
 import dataClasses.addParagraph
 import github.MockRepoNode
 import java.util.Base64
+import ui.App
+import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.runtime.*
+import androidx.compose.material.Text
+import androidx.compose.material.Button
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import kotlinx.coroutines.runBlocking
+
+fun main() = application {
+    val root = MockRepoNode.test()
+    Window(onCloseRequest = ::exitApplication) {
+        App(root)
+    }
+}
+ /**
+@Composable
+@Preview
+fun App() {
+    var counter by remember { mutableStateOf(0) }
+    Button(onClick = { counter++ }) {
+        Text("Clicked $counter times")
+        mainTest()
+    }
+}
+**/
+fun mainTest() = runBlocking {
+    test()
+}
 
 
-suspend fun main() {
+suspend fun test() {
     val owner = "LassiEH"
     val repo = "documenter"
     val contents = "src/main/kotlin"
@@ -44,7 +73,7 @@ suspend fun main() {
         }
     }
 
-    // val root = repoHandler.fetchRepo(owner, repo)
+    //val root = repoHandler.fetchRepo(owner, repo)
     val root = MockRepoNode.test()
     printTree(root)
 
