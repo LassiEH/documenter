@@ -23,6 +23,8 @@ fun App(root: RepoNode) {
 
                 Spacer(Modifier.height(16.dp))
                 Button(onClick = { println("Add heading") }) { Text("Add Heading") }
+
+                Button(onClick = { println("Add snippet")}) { Text("Add snippet") }
             }
         }
         Box(Modifier.weight(1f).fillMaxHeight()) {
