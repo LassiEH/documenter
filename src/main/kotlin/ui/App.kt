@@ -15,7 +15,6 @@ import dataClasses.addCode
 fun App(root: RepoNode) {
     var selectedFile by remember { mutableStateOf<FileNode?>(null) }
     var document by remember { mutableStateOf(Document(title = "document", repoName = root.name)) }
-    var selectedSnippet by remember { mutableStateOf<DocumentItem.Code?>(null) }
 
     Row(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f)) {
@@ -26,17 +25,6 @@ fun App(root: RepoNode) {
 
                 Spacer(Modifier.height(16.dp))
                 Button(onClick = { println("Add heading") }) { Text("Add Heading") }
-
-                Button(onClick = {
-                    val snippet = selectedSnippet
-                    if (snippet != null && selectedFile != null) {
-                        document = document.copy().apply {
-                            addCode(selectedFile!!.path, snippet.code)
-                        }
-                    }
-                }) {
-                    Text("Add Snippet")
-                }
 
             }
         }
@@ -50,7 +38,8 @@ fun App(root: RepoNode) {
             RepoViewer(
                 selectedFile,
                 onCodeSelected = { snippet ->
-                    selectedSnippet = snippet
+                    val updatedParts = document.parts + snippet
+                    document = document.copy(parts = updatedParts as MutableList<DocumentItem>)
             }
             )
         }
