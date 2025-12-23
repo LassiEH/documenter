@@ -1,21 +1,17 @@
 # documenter
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
-
-Here are some useful links to get you started:
-
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need
-  to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+Documenter is an application that closely connects your repository with your documentation.
+You can write your documentation while adding context with images like architecture digrams but also code snippets.
 
 ## Features
 
-Here's a list of features included in this project:
+This project when completed should have the following capabilities:
 
-| Name                                               | Description                                                 |
-| ----------------------------------------------------|------------------------------------------------------------- |
-| [Routing](https://start.ktor.io/p/routing-default) | Allows to define structured routes and associated handlers. |
+| Feature                 | Description                        |
+|-------------------------|------------------------------------|
+| Fetch GitHub repository | User can fetch their repository    |
+| Create a document       | User can add text, code and images |
+| Save document           | User can save the document         |
 
 ## Building & Running
 
