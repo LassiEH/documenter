@@ -13,6 +13,19 @@ This project when completed should have the following capabilities:
 | Create a document       | User can add text, code and images |
 | Save document           | User can save the document         |
 
+## How it works
+
+Documenter should be used to compile all needed documentation for easy browsing.
+The applications user interface is divided into three compartments: Document viewer, 
+repository tree viewer and file content viewer. See the picture below for visualisation.
+
+![Example how all the UI functionalities can be used.](/images/all_ui_functionalities.png)
+
+#### Document viewer
+
+Here you create the document with header and paragraph text inputs, images and code snippets you can pick
+from the file content viewer after opening the file with the repository viewer.
+
 ## Building & Running
 
 To build or run the project, use one of the following tasks:
