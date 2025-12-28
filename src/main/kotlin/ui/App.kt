@@ -8,32 +8,62 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.TextField
 import dataClasses.Document
 import dataClasses.addCode
+import dataClasses.addHeading
+import dataClasses.addParagraph
 
 @Composable
 fun App(root: RepoNode) {
     var selectedFile by remember { mutableStateOf<FileNode?>(null) }
     var document by remember { mutableStateOf(Document(title = "document", repoName = root.name)) }
+    var inputText by remember { mutableStateOf("") }
 
     Row(Modifier.fillMaxSize()) {
+        // view for the document item being created
         Box(Modifier.weight(1f)) {
             Column {
+                TextField(
+                    value = inputText,
+                    onValueChange = { inputText = it },
+                    label = { Text("Text") }
+                )
+
+                Row {
+                    Button(onClick = {
+                        val newHeading = DocumentItem.Heading(inputText)
+                        document = document.copy(parts = (document.parts + newHeading) as MutableList<DocumentItem>)
+                        inputText = ""
+                    }) {
+                        Text("Add text as heading")
+                    }
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Button(onClick = {
+                        val newParagraph = DocumentItem.Paragraph(inputText)
+                        document = document.copy(parts = (document.parts + newParagraph) as MutableList<DocumentItem>)
+                        inputText = ""
+                    }) {
+                        Text("Add text as paragraph")
+                    }
+                }
+
                 DocumenterView(
                     document = document
                 )
 
-                Spacer(Modifier.height(16.dp))
-                Button(onClick = { println("Add heading") }) { Text("Add Heading") }
-
             }
         }
+        // view for the repository tree
         Box(Modifier.weight(1f).fillMaxHeight()) {
             DocuExplorer(
                 root = root,
                 selected = {selectedFile = it}
             )
         }
+        // view for the opened files content
         Box(Modifier.weight(1f).fillMaxHeight()) {
             RepoViewer(
                 selectedFile,
