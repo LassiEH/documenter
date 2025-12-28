@@ -13,6 +13,20 @@ import dataClasses.Document
 import dataClasses.addCode
 import dataClasses.addHeading
 import dataClasses.addParagraph
+import java.awt.FileDialog
+import java.awt.Frame
+import java.io.File
+
+fun pickImageFile(): File? {
+    val dialog = FileDialog(Frame(), "Select image", FileDialog.LOAD)
+    dialog.isVisible = true
+
+    return if (dialog.file != null) {
+        File(dialog.directory, dialog.file)
+    } else {
+        null
+    }
+}
 
 @Composable
 fun App(root: RepoNode) {
@@ -47,6 +61,26 @@ fun App(root: RepoNode) {
                         inputText = ""
                     }) {
                         Text("Add text as paragraph")
+                    }
+
+                    Button(onClick = {
+                        val file = pickImageFile()
+                        if (file != null) {
+                            try {
+                                val fileBytes = file.readBytes()
+                                val newImage = DocumentItem.Image(
+                                    title = file.name,
+                                    bytes = fileBytes,
+                                )
+                                document = document.copy(
+                                    parts = (document.parts + newImage) as MutableList<DocumentItem>
+                                )
+                            } catch (e: Exception) {
+                                println("Error reading file: ${e.message}")
+                            }
+                        }
+                    }) {
+                        Text("Pick image file")
                     }
                 }
 
