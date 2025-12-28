@@ -12,7 +12,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import dataClasses.Document
@@ -64,7 +66,16 @@ fun DocumenterView(document: Document) {
                     CodeBlock(item)
                 }
                 is DocumentItem.Image -> {
-                    Text(item.title)
+                    val bitmap = remember(item.bytes) {
+                        org.jetbrains.skia.Image.makeFromEncoded(item.bytes).toComposeImageBitmap()
+                    }
+                    Column {
+                        androidx.compose.foundation.Image(
+                            bitmap = bitmap,
+                            contentDescription = item.title
+                        )
+                        Text(item.title)
+                    }
                 }
             }
         }
