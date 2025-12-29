@@ -21,6 +21,7 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    testImplementation(kotlin("test"))
 }
 
 application {
@@ -38,6 +39,6 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:${ktorVersion}")
     implementation("io.ktor:ktor-client-content-negotiation:${ktorVersion}")
 //    testImplementation("io.ktor:ktor-server-test-host")
-//    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     //implementation("ch.qos.logback:logback-classic:${logbackVersion}")
 }
