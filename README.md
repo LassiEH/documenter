@@ -26,6 +26,10 @@ repository tree viewer and file content viewer. See the picture below for visual
 Here you create the document with header and paragraph text inputs, images and code snippets you can pick
 from the file content viewer after opening the file with the repository viewer.
 
+You can also save and load your document. See below for details:
+
+![Example how you can load and add stuff.](/images/gif_load_json.gif)
+
 ## Building & Running
 
 To build or run the project, use one of the following tasks:
