@@ -16,25 +16,28 @@ import androidx.compose.material.Text
 import androidx.compose.material.Button
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import documentManager.DocumentStorage
 import kotlinx.coroutines.runBlocking
+import java.io.File
 
 fun main() = application {
+    //val repoHandler = RepoHandler()
+    //val root = fetchRealRoot()
+
     val root = MockRepoNode.test()
     Window(onCloseRequest = ::exitApplication) {
         App(root)
     }
 }
- /**
-@Composable
-@Preview
-fun App() {
-    var counter by remember { mutableStateOf(0) }
-    Button(onClick = { counter++ }) {
-        Text("Clicked $counter times")
-        mainTest()
-    }
+
+suspend fun fetchRealRoot(): FolderNode {
+    val owner = "LassiEH"
+    val repo = "documenter"
+    val repoHandler = RepoHandler()
+    val root = repoHandler.fetchRepo(owner = owner, repo = repo)
+    return root
 }
-**/
+
 fun mainTest() = runBlocking {
     test()
 }

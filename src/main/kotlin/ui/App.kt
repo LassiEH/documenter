@@ -13,6 +13,7 @@ import dataClasses.Document
 import dataClasses.addCode
 import dataClasses.addHeading
 import dataClasses.addParagraph
+import documentManager.DocumentStorage
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
@@ -83,6 +84,19 @@ fun App(root: RepoNode) {
                         Text("Pick image file")
                     }
                 }
+
+                Button(onClick = {
+                    DocumentStorage.save(document, File("document.json"))
+                }) {
+                    Text("Save")
+                }
+
+                Button(onClick = {
+                    document = DocumentStorage.load(File("document.json"))
+                }) {
+                    Text("Load")
+                }
+
 
                 DocumenterView(
                     document = document

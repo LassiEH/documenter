@@ -1,8 +1,10 @@
 package dataClasses
 
 import DocumentItem
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Serializable
 data class Document(
     val id: String = UUID.randomUUID().toString(),
     var title: String,
