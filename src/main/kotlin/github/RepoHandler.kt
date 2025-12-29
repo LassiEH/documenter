@@ -13,7 +13,10 @@ import kotlinx.serialization.json.Json
 import java.util.Base64
 
 // https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
-// Fetch repository from GitHub
+/**
+ * RepoHandler is responsible for fetching repository data from
+ * GitHub REST API
+ */
 
 class RepoHandler {
 
@@ -25,6 +28,10 @@ class RepoHandler {
         }
     }
 
+    /**
+     * Recursively fetches a folder's contents and converts them into RepoNodes.
+     * This is called by fetchRepo
+     */
     suspend fun fetchFolder(owner: String, repo: String, rs: RepositoryStructure): FolderNode {
         val url = "https://api.github.com/repos/$owner/$repo/contents/${rs.path}"
         val childrenRs: List<RepositoryStructure> = client.get(url).body()
@@ -46,6 +53,9 @@ class RepoHandler {
         return folder
     }
 
+    /**
+     * Creates a FileNode with content
+     */
     suspend fun fetchFile(owner: String, repo: String, rs: RepositoryStructure): FileNode {
         // very heavy on GitHub api rate limits...
         val decoded = fetchFileContents(owner, repo, rs.path)
@@ -56,6 +66,10 @@ class RepoHandler {
         )
     }
 
+    /**
+     * Decodes Base64 encoded file content returned by GitHub API.
+     * This is called by fetchFileContents
+     */
     fun decodeBase64(encodedContent: String?): String {
         val cleaned = encodedContent?.filterNot { it.isWhitespace() }
         val decodedBytes = Base64.getDecoder().decode(cleaned)
@@ -63,6 +77,11 @@ class RepoHandler {
         return decodedBytes.toString(Charsets.UTF_8)
     }
 
+    /**
+     * Fetches file contents and passes them to decoder
+     * before returning them.
+     * This is called by fetchFile
+     */
     suspend fun fetchFileContents(owner: String, repo: String, path: String): String {
         val url = "https://api.github.com/repos/$owner/$repo/contents/$path"
         val file: RepositoryStructure = client.get(url).body()
@@ -76,10 +95,15 @@ class RepoHandler {
         return decodedString
     }
 
+    /**
+     * Fetches the full repository structure and returns it as a FolderNode tree.
+     * This fetches files and folders recursively, and fetches file contents eagerly.
+     *
+     * @param owner: GitHub username
+     * @param repo: Name of the repository in GitHub
+     * @return the root FolderNode
+     */
     suspend fun fetchRepo(owner: String, repo: String): FolderNode {
-        /*
-        Fetch all repository nodes.
-        */
         val url = "https://api.github.com/repos/$owner/$repo/contents"
         val rootRs: List<RepositoryStructure> = client.get(url).body()
 

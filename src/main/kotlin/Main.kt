@@ -21,8 +21,14 @@ import kotlinx.coroutines.runBlocking
 import java.io.File
 
 fun main() = application {
-    //val repoHandler = RepoHandler()
-    //val root = fetchRealRoot()
+    // To use (my) real repository
+    // TEMPORARY SOLUTION WITH RUN BLOCKING
+    /*
+    val repoHandler = RepoHandler()
+    val root = runBlocking {
+        fetchRealRoot()
+    }
+    */
 
     val root = MockRepoNode.test()
     Window(onCloseRequest = ::exitApplication) {
