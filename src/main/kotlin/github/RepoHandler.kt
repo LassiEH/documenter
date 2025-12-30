@@ -87,10 +87,6 @@ class RepoHandler {
         val file: RepositoryStructure = client.get(url).body()
 
         val decodedString = decodeBase64(file.content)
-        //val base64 = file.content ?: return ""
-
-        //val cleaned = base64.filterNot { it.isWhitespace() }
-        //val decodedBytes = Base64.getDecoder().decode(cleaned)
 
         return decodedString
     }
