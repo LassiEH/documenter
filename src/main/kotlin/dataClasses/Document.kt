@@ -4,6 +4,12 @@ import DocumentItem
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
+/**
+ * Represents a document made by a user.
+ *
+ * The document is made up of text (headers and paragraphs),
+ * images and code snippets.
+ */
 @Serializable
 data class Document(
     val id: String = UUID.randomUUID().toString(),
@@ -12,6 +18,9 @@ data class Document(
     val parts: MutableList<DocumentItem> = mutableListOf(),
 )
 
+/**
+ * Appending items to the document item list
+ */
 fun Document.addHeading(text: String) =
     parts.add(DocumentItem.Heading(text))
 
