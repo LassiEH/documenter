@@ -44,55 +44,6 @@ suspend fun fetchRealRoot(): FolderNode {
     return root
 }
 
-fun mainTest() = runBlocking {
-    test()
-}
-
-
-suspend fun test() {
-    val owner = "LassiEH"
-    val repo = "documenter"
-    val contents = "src/main/kotlin"
-    val fileAddress = "src/main/kotlin/Main.kt"
-    val addList = mutableListOf<String>()
-    val repoHandler = RepoHandler()
-
-    val docu = Document(
-        title = "tst docu",
-        repoName = "tst repo"
-    )
-
-    docu.addHeading("Installing")
-    docu.addParagraph("How to install")
-
-    val imageBytes = ByteArray(10) { it.toByte() }
-    docu.addImage("install", imageBytes)
-    docu.addCode("src/main/kotlin/Main.kt", "fun main() {println(hello)}")
-
-    docu.parts.forEach { item ->
-        when (item) {
-            is DocumentItem.Heading ->
-                println(item.text)
-            is DocumentItem.Paragraph ->
-                println(item.text)
-            is DocumentItem.Image ->
-                println(item.bytes)
-            is DocumentItem.Code ->
-                println(item.code)
-        }
-    }
-
-    //val root = repoHandler.fetchRepo(owner, repo)
-    val root = MockRepoNode.test()
-    printTree(root)
-
-    val file = findFile(root, "Main.kt")
-    printFileContent(file)
-
-    repoHandler.closeClient()
-
-}
-
 fun printTree(node: RepoNode, indent: String = "") {
     when (node) {
         is FolderNode -> {
@@ -105,34 +56,4 @@ fun printTree(node: RepoNode, indent: String = "") {
             println("$indent ${node.name}")
         }
     }
-}
-
-fun findFile(node: RepoNode, searchedName: String): FileNode? {
-    return when (node) {
-        is FileNode -> {
-            if (node.name == searchedName) node else null
-        }
-        is FolderNode -> {
-            for (child in node.children) {
-                val result = findFile(child, searchedName)
-                if (result != null) return result
-            }
-            null
-
-        }
-    }
-}
-
-// only used with mock data
-fun printFileContent(file: FileNode?) {
-    val decoded = decodeBase64(file?.content)
-    println(decoded)
-}
-
-
-fun decodeBase64(encodedContent: String?): String {
-    val cleaned = encodedContent?.filterNot { it.isWhitespace() }
-    val decodedBytes = Base64.getDecoder().decode(cleaned)
-
-    return decodedBytes.toString(Charsets.UTF_8)
 }

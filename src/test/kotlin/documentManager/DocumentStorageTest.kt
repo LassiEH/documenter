@@ -51,5 +51,24 @@ class DocumentStorageTest {
         assertEquals(1, doc.parts.size)
         assertTrue(doc.parts.first() is DocumentItem.Code)
     }
+
+    @Test
+    fun `code snippet preserves file path and code`() {
+        val doc = Document(
+            title = "My First Doc",
+            repoName = "repo"
+        )
+        val filePath = "src/Main.kt"
+        val code = "fun main() { println(\"Hello\") }"
+        doc.addCode(
+            filePath = filePath,
+            code = code
+        )
+
+        assertEquals(1, doc.parts.size)
+        val codeItem = doc.parts.first() as DocumentItem.Code
+        assertEquals(filePath, codeItem.filePath)
+        assertEquals(code, codeItem.code)
+    }
 }
 

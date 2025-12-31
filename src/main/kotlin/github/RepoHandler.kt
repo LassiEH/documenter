@@ -3,6 +3,7 @@ package github
 import dataClasses.RepositoryStructure
 import dataClasses.FolderNode
 import dataClasses.FileNode
+import dataClasses.RepoNode
 import io.ktor.client.*
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.*
@@ -119,6 +120,22 @@ class RepoHandler {
         }
 
         return root
+    }
+
+    fun findFile(node: RepoNode, searchedName: String): FileNode? {
+        return when (node) {
+            is FileNode -> {
+                if (node.name == searchedName) node else null
+            }
+            is FolderNode -> {
+                for (child in node.children) {
+                    val result = findFile(child, searchedName)
+                    if (result != null) return result
+                }
+                null
+
+            }
+        }
     }
 
     fun closeClient() {
