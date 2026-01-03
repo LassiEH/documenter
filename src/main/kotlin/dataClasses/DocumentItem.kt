@@ -10,7 +10,10 @@ sealed class DocumentItem {
     @Serializable
     data class Paragraph(val text: String) : DocumentItem()
     @Serializable
-    data class Image(val title: String, val bytes: ByteArray) : DocumentItem()
+    data class Image(
+        val title: String,
+        val bytes: ByteArray
+    ) : DocumentItem()
 
     /**
      * A code snippet
