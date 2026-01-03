@@ -14,9 +14,11 @@ import dataClasses.addCode
 import dataClasses.addHeading
 import dataClasses.addParagraph
 import documentManager.DocumentStorage
+import export.MarkdownExporter
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
+import java.nio.file.Paths
 
 fun pickImageFile(): File? {
     val dialog = FileDialog(Frame(), "Select image", FileDialog.LOAD)
@@ -44,6 +46,12 @@ fun App(root: RepoNode) {
                     onValueChange = { inputText = it },
                     label = { Text("Text") }
                 )
+                Button(onClick = {
+                    val exporter = MarkdownExporter()
+                    exporter.export(document, Paths.get("exports/my-doc"))
+                }) {
+                    Text("Export")
+                }
 
                 Row {
                     Button(onClick = {
