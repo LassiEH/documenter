@@ -27,8 +27,8 @@ fun Document.addHeading(text: String) =
 fun Document.addParagraph(text: String) =
     parts.add(DocumentItem.Paragraph(text))
 
-fun Document.addImage(title: String, bytes: ByteArray) =
-    parts.add(DocumentItem.Image(title, bytes))
+fun Document.addImage(title: String, relativePath: String) =
+    parts.add(DocumentItem.Image(title, relativePath))
 
 fun Document.addCode(filePath: String, code: String) =
     parts.add(DocumentItem.Code(filePath, code))

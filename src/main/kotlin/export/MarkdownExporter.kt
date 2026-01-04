@@ -3,6 +3,8 @@ package export
 import dataClasses.Document
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 
 class MarkdownExporter : DocumentExporter {
     override fun export(document: Document, outputDir: Path) {
@@ -23,16 +25,24 @@ class MarkdownExporter : DocumentExporter {
                     sb.append("${item.text}\n\n")
 
                 is DocumentItem.Image -> {
-                    val filename = item.title
-                    Files.write(imageDir.resolve(filename), item.bytes)
+                    val targetImgPath = outputDir
+                        .resolve(item.relativePath)
 
-                    sb.append("![${item.title}](images/$filename)\n\n")
+                    Files.createDirectories(targetImgPath.parent)
+
+                    Files.copy(
+                        Paths.get(item.relativePath),
+                        targetImgPath,
+                        StandardCopyOption.REPLACE_EXISTING
+                    )
+
+                    sb.append("![](${item.relativePath})\n\n")
                 }
 
                 is DocumentItem.Code -> {
-                    sb.append("```")
+                    sb.append("```\n")
                     sb.append("${item.code}\n\n")
-                    sb.append("```")
+                    sb.append("\n```\n\n")
                 }
             }
 
