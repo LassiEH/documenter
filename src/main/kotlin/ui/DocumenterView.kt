@@ -1,5 +1,6 @@
 package ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,35 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import dataClasses.Document
 import dataClasses.RepoNode
+import java.io.File
+
+data class PendingImage(
+    val fileName: String,
+    val bytes: ByteArray,
+)
+
+@Composable
+fun ImageBlock(image: DocumentItem.Image) {
+    val imageFile = remember(image.relativePath) {
+        File(image.relativePath)
+    }
+
+    if (imageFile.exists()) {
+        val bitmap = remember {
+            org.jetbrains.skia.Image
+                .makeFromEncoded(imageFile.readBytes())
+                .toComposeImageBitmap()
+        }
+
+        Image(
+            bitmap = bitmap,
+            contentDescription = image.fileName,
+            modifier = Modifier.fillMaxSize(),
+        )
+    } else {
+        Text("Image doesn't exist.", color = Color.Gray)
+    }
+}
 
 @Composable
 fun CodeBlock(code: DocumentItem.Code) {
@@ -66,16 +96,7 @@ fun DocumenterView(document: Document) {
                     CodeBlock(item)
                 }
                 is DocumentItem.Image -> {
-                    val bitmap = remember(item.bytes) {
-                        org.jetbrains.skia.Image.makeFromEncoded(item.bytes).toComposeImageBitmap()
-                    }
-                    Column {
-                        androidx.compose.foundation.Image(
-                            bitmap = bitmap,
-                            contentDescription = item.title
-                        )
-                        Text(item.title)
-                    }
+                    ImageBlock(item)
                 }
             }
         }

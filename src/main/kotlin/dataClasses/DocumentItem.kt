@@ -11,8 +11,9 @@ sealed class DocumentItem {
     data class Paragraph(val text: String) : DocumentItem()
     @Serializable
     data class Image(
-        val title: String,
-        val bytes: ByteArray
+        val fileName: String,
+        val relativePath: String, // saving to json with bytearray is not sustainable
+        //val bytes: ByteArray
     ) : DocumentItem()
 
     /**

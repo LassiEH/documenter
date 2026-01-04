@@ -18,6 +18,7 @@ import export.MarkdownExporter
 import java.awt.FileDialog
 import java.awt.Frame
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Paths
 
 fun pickImageFile(): File? {
@@ -77,9 +78,15 @@ fun App(root: RepoNode) {
                         if (file != null) {
                             try {
                                 val fileBytes = file.readBytes()
+                                val fileName = file.name
+
+                                val imagePath = Paths.get("images", fileName)
+                                Files.createDirectories(imagePath.parent)
+                                Files.write(imagePath, fileBytes)
+
                                 val newImage = DocumentItem.Image(
-                                    title = file.name,
-                                    bytes = fileBytes,
+                                    fileName = file.name,
+                                    relativePath = "images/${file.name}",
                                 )
                                 document = document.copy(
                                     parts = (document.parts + newImage) as MutableList<DocumentItem>
