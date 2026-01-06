@@ -1,24 +1,11 @@
-import dataClasses.Document
 import github.RepoHandler
 import dataClasses.RepoNode
 import dataClasses.FolderNode
 import dataClasses.FileNode
-import dataClasses.addCode
-import dataClasses.addHeading
-import dataClasses.addImage
-import dataClasses.addParagraph
 import github.MockRepoNode
-import java.util.Base64
 import ui.App
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.runtime.*
-import androidx.compose.material.Text
-import androidx.compose.material.Button
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import documentManager.DocumentStorage
-import kotlinx.coroutines.runBlocking
-import java.io.File
 
 fun main() = application {
     // To use (my) real repository

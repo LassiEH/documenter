@@ -1,6 +1,6 @@
 package ui
 
-import DocumentItem
+import documentEditHandler.DocumentEditor
 import androidx.compose.runtime.*
 import dataClasses.FileNode
 import dataClasses.RepoNode
@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.TextField
 import dataClasses.Document
-import dataClasses.addCode
-import dataClasses.addHeading
-import dataClasses.addParagraph
 import documentManager.DocumentStorage
 import export.MarkdownExporter
 import java.awt.FileDialog
@@ -38,6 +35,15 @@ fun App(root: RepoNode) {
     var document by remember { mutableStateOf(Document(title = "document", repoName = root.name)) }
     var inputText by remember { mutableStateOf("") }
 
+    val editor = remember {
+        DocumentEditor(
+            Document(
+                title = document.title,
+                repoName = root.name,
+            )
+        )
+    }
+
     Row(Modifier.fillMaxSize()) {
         // view for the document item being created
         Box(Modifier.weight(1f)) {
@@ -56,8 +62,7 @@ fun App(root: RepoNode) {
 
                 Row {
                     Button(onClick = {
-                        val newHeading = DocumentItem.Heading(inputText)
-                        document = document.copy(parts = (document.parts + newHeading) as MutableList<DocumentItem>)
+                        editor.addHeading(inputText)
                         inputText = ""
                     }) {
                         Text("Add text as heading")
@@ -66,8 +71,7 @@ fun App(root: RepoNode) {
                     Spacer(Modifier.height(8.dp))
 
                     Button(onClick = {
-                        val newParagraph = DocumentItem.Paragraph(inputText)
-                        document = document.copy(parts = (document.parts + newParagraph) as MutableList<DocumentItem>)
+                        editor.addParagraph(inputText)
                         inputText = ""
                     }) {
                         Text("Add text as paragraph")
@@ -84,13 +88,11 @@ fun App(root: RepoNode) {
                                 Files.createDirectories(imagePath.parent)
                                 Files.write(imagePath, fileBytes)
 
-                                val newImage = DocumentItem.Image(
-                                    fileName = file.name,
+                                editor.addImage(
+                                    title = file.name,
                                     relativePath = "images/${file.name}",
                                 )
-                                document = document.copy(
-                                    parts = (document.parts + newImage) as MutableList<DocumentItem>
-                                )
+
                             } catch (e: Exception) {
                                 println("Error reading file: ${e.message}")
                             }
@@ -114,7 +116,7 @@ fun App(root: RepoNode) {
 
 
                 DocumenterView(
-                    document = document
+                    document = editor.document
                 )
 
             }
@@ -131,8 +133,10 @@ fun App(root: RepoNode) {
             RepoViewer(
                 selectedFile,
                 onCodeSelected = { snippet ->
-                    val updatedParts = document.parts + snippet
-                    document = document.copy(parts = updatedParts as MutableList<DocumentItem>)
+                    editor.addCode(
+                        filePath = snippet.filePath,
+                        code = snippet.code
+                    )
             }
             )
         }

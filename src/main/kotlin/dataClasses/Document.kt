@@ -1,6 +1,8 @@
 package dataClasses
 
 import DocumentItem
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
@@ -17,18 +19,3 @@ data class Document(
     val repoName: String,
     val parts: MutableList<DocumentItem> = mutableListOf(),
 )
-
-/**
- * Appending items to the document item list
- */
-fun Document.addHeading(text: String) =
-    parts.add(DocumentItem.Heading(text))
-
-fun Document.addParagraph(text: String) =
-    parts.add(DocumentItem.Paragraph(text))
-
-fun Document.addImage(title: String, relativePath: String) =
-    parts.add(DocumentItem.Image(title, relativePath))
-
-fun Document.addCode(filePath: String, code: String) =
-    parts.add(DocumentItem.Code(filePath, code))

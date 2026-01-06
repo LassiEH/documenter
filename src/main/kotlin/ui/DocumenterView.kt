@@ -4,11 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material.Text
@@ -19,13 +21,7 @@ import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import dataClasses.Document
-import dataClasses.RepoNode
 import java.io.File
-
-data class PendingImage(
-    val fileName: String,
-    val bytes: ByteArray,
-)
 
 @Composable
 fun ImageBlock(image: DocumentItem.Image) {
@@ -43,7 +39,9 @@ fun ImageBlock(image: DocumentItem.Image) {
         Image(
             bitmap = bitmap,
             contentDescription = image.fileName,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 400.dp)
         )
     } else {
         Text("Image doesn't exist.", color = Color.Gray)
@@ -67,19 +65,21 @@ fun CodeBlock(code: DocumentItem.Code) {
 
 @Composable
 fun DocumenterView(document: Document) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = document.title,
-            style = MaterialTheme.typography.h5
-        )
+        item {
+            Text(
+                text = document.title,
+                style = MaterialTheme.typography.h5
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
-        for (item in document.parts) {
+        items(document.parts) { item ->
             when (item) {
                 is DocumentItem.Heading -> {
                     Text(
@@ -87,19 +87,22 @@ fun DocumenterView(document: Document) {
                         style = MaterialTheme.typography.h6
                     )
                 }
+
                 is DocumentItem.Paragraph -> {
                     Text(
                         text = item.text,
                     )
                 }
+
                 is DocumentItem.Code -> {
                     CodeBlock(item)
                 }
+
                 is DocumentItem.Image -> {
                     ImageBlock(item)
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
-
 }
